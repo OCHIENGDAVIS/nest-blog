@@ -6,12 +6,16 @@ export class Blog {
 
   @Column()
   title: string;
+
   @Column()
   content: string;
-  @Column()
+
+  @Column({ default: false })
   published: boolean;
-  @Column()
-  publshedAt: Date;
-  @Column()
+
+  @Column({ default: new Date() })
+  createedAt: Date;
+
+  @Column({ default: new Date() })
   updatedAt: Date;
 }
