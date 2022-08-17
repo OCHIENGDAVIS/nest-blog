@@ -33,4 +33,10 @@ export class AuthController {
   getCurrentUser(@CurrentUserDecorator() user: User) {
     return user;
   }
+
+  @Get('/logout')
+  logout(@Session() session: any) {
+    session.userId = null;
+    return;
+  }
 }
