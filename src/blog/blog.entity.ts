@@ -1,5 +1,6 @@
-import { Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity()
 export class Blog {
   @PrimaryGeneratedColumn()
   id: number;
@@ -13,9 +14,9 @@ export class Blog {
   @Column({ default: false })
   published: boolean;
 
-  @Column({ default: new Date() })
+  @Column({ default: 'NOW()' })
   createedAt: Date;
 
-  @Column({ default: new Date() })
+  @Column({ default: 'NOW()' })
   updatedAt: Date;
 }

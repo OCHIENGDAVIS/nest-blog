@@ -16,7 +16,7 @@ import { APP_PIPE } from '@nestjs/core';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'db.sqlite',
-      synchronize: false,
+      synchronize: true,
       entities: [User, Blog],
     }),
   ],
