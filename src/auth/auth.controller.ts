@@ -13,9 +13,12 @@ import { LoginUserDto } from './dtos/login-user.dto';
 import { CurrentUserInterceptor } from 'src/interceptors/current-user.interceptor';
 import { CurrentUserDecorator } from './decorators/current-user.decorator';
 import { User } from './User.entity';
+import { UserDto } from './dtos/user.dto';
+import { UserSerilizerInterceptor } from './interceptors/user-serializer.intercepto';
 
 @Controller('auth')
 @UseInterceptors(CurrentUserInterceptor)
+@UseInterceptors(new UserSerilizerInterceptor(UserDto))
 export class AuthController {
   constructor(private authService: AuthService) {}
 
