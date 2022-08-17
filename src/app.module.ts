@@ -13,14 +13,29 @@ import { Blog } from './blog/blog.entity';
 import { APP_PIPE } from '@nestjs/core';
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env.development',
+    }),
     AuthModule,
     BlogModule,
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'db.sqlite',
-      synchronize: true,
-      entities: [User, Blog],
+    TypeOrmModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => {
+        return {
+          type: 'sqlite',
+          database: config.get<string>('DB_NAME'),
+          synchronize: true,
+          entities: [User, Blog],
+        };
+      },
     }),
+    // TypeOrmModule.forRoot({
+    //   type: 'sqlite',
+    //   database: 'db.sqlite',
+    //   synchronize: true,
+    //   entities: [User, Blog],
+    // }),
   ],
   controllers: [AppController],
   providers: [
@@ -29,11 +44,12 @@ import { APP_PIPE } from '@nestjs/core';
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(
         cookieSession({
-          keys: ['wewertrtsdgf'],
+          keys: [this.configService.get<string>('COOKEY_KEY')],
         }),
       )
       .forRoutes('*');
