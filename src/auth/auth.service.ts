@@ -17,7 +17,8 @@ import { CreateUserDto } from './dtos/create-user.dto';
 @Injectable()
 export class AuthService {
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
-  async login(email: string, password: string) {
+  async login(body: { email: string; password: string }, session: any) {
+    const { email, password } = body;
     const user = await this.userRepo.findOne({ where: { email } });
     if (!user) {
       throw new BadRequestException('email not found');
@@ -28,10 +29,11 @@ export class AuthService {
       throw new BadRequestException('invalid password');
     }
     // setup Cookie authentication here
+    session.userId = user.id;
     return user;
   }
 
-  async register(createUserDto: CreateUserDto) {
+  async register(createUserDto: CreateUserDto, session: any) {
     const { email, password, username } = createUserDto;
     const emailExists = await this.userRepo.findOne({ where: { email } });
     if (emailExists) {
@@ -46,6 +48,8 @@ export class AuthService {
     const result = salt + '.' + hash.toString('hex');
     const user = this.userRepo.create({ email, username, password: result });
     await this.userRepo.save(user);
+    // setup Cookie authentication here
+    session.userId = user.id;
     return user;
   }
 }
