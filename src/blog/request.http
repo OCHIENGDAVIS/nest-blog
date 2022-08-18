@@ -1,3 +1,7 @@
+### Get all Posts 
+GET http://localhost:3000/blog
+
+
 ### Creating a new Blog 
 POST http://localhost:3000/blog/create HTTP/1.1
 content-type: application/json
@@ -8,14 +12,20 @@ content-type: application/json
 }
 
 ### Gett a a single Blog Post 
-GET http://localhost:3000/blog/3
+GET http://localhost:3000/blog/1
 
 ### Updating a blog 
 
-PATCH http://localhost:3000/blog/1 
+PATCH http://localhost:3000/blog/2 
 content-type: application/json
 
 {
-    "title": "A new title",
-    "content": "Learning nest is sweet"
+    "title": "A new title has been updated",
+    "content": "Learning nest is sweeter and easier"
 }
+
+### Delete a blog 
+DELETE http://localhost:3000/blog/1
+
+### Search a Blog 
+GET http://localhost:3000/blog/search/blog?title=Learning&content=easier
