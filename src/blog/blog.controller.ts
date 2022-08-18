@@ -7,14 +7,17 @@ import {
   Patch,
   Delete,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 
 import { CreateBlogDto } from './dtos/create-blog.dto';
 import { UpdateBlogDto } from './dtos/update-blog.dto';
 import { BlogService } from './Blog.service';
 import { BlogSearchQuery } from './dtos/blog-search-query.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('blog')
+@UseGuards(AuthGuard)
 export class BlogController {
   constructor(private blogService: BlogService) {}
 
