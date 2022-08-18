@@ -9,3 +9,13 @@ content-type: application/json
 
 ### Gett a a single Blog Post 
 GET http://localhost:3000/blog/3
+
+### Updating a blog 
+
+PATCH http://localhost:3000/blog/1 
+content-type: application/json
+
+{
+    "title": "A new title",
+    "content": "Learning nest is sweet"
+}
