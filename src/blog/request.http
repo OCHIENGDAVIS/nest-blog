@@ -6,3 +6,6 @@ content-type: application/json
     "title": "Learning nest js ",
     "content": "This is for the long life learners"
 }
+
+### Gett a a single Blog Post 
+GET http://localhost:3000/blog/3

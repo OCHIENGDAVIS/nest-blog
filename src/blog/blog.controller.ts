@@ -11,4 +11,9 @@ export class BlogController {
   async createBlog(@Body() body: CreateBlogDto) {
     return await this.blogService.createBlog(body);
   }
+
+  @Get('/:id')
+  async getBlog(@Param('id') id: string) {
+    return await this.blogService.getBlog(parseInt(id));
+  }
 }

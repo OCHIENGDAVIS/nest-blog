@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, HttpException, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -13,7 +13,11 @@ export class BlogService {
     const blog = this.blogRepo.create(body);
     return await this.blogRepo.save(blog);
   }
-  getBlog(id: number) {}
+  async getBlog(id: number) {
+    const blog = await this.blogRepo.findOne({ where: { id } });
+    if (!blog) throw new HttpException('Blog not found', HttpStatus.NOT_FOUND);
+    return blog;
+  }
   updateBlog() {}
   deleteBlog(id: number) {}
 
