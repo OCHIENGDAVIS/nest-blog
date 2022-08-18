@@ -1,0 +1,8 @@
+### Creating a new Blog 
+POST http://localhost:3000/blog/create HTTP/1.1
+content-type: application/json
+
+{
+    "title": "Learning nest js ",
+    "content": "This is for the long life learners"
+}
