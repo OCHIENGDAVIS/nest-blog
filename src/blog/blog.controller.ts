@@ -8,16 +8,23 @@ import {
   Delete,
   Query,
   UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 
+import { User } from 'src/auth/User.entity';
 import { CreateBlogDto } from './dtos/create-blog.dto';
 import { UpdateBlogDto } from './dtos/update-blog.dto';
 import { BlogService } from './Blog.service';
 import { BlogSearchQuery } from './dtos/blog-search-query.dto';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { CurrentUserDecorator } from 'src/auth/decorators/current-user.decorator';
+import { BlogDto } from './dtos/blog.dto';
+import { BlogSerialiazerInterceptor } from './interceptors/blog-serializer.interceptor';
 
 @Controller('blog')
 @UseGuards(AuthGuard)
+@UseInterceptors(new BlogSerialiazerInterceptor(BlogDto))
 export class BlogController {
   constructor(private blogService: BlogService) {}
 
@@ -27,8 +34,11 @@ export class BlogController {
   }
 
   @Post('/create')
-  async createBlog(@Body() body: CreateBlogDto) {
-    return await this.blogService.createBlog(body);
+  async createBlog(
+    @Body() body: CreateBlogDto,
+    @CurrentUserDecorator() user: User,
+  ) {
+    return await this.blogService.createBlog(body, user);
   }
 
   @Get('/:id')

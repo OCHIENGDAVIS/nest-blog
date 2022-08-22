@@ -6,6 +6,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 import { User } from 'src/auth/User.entity';
 
