@@ -30,8 +30,11 @@ export class BlogService {
     return blog;
   }
 
-  async updateBlog(id: number, body: UpdateBlogDto) {
-    const blog = await this.blogRepo.findOne({ where: { id } });
+  async updateBlog(id: number, body: UpdateBlogDto, user: User) {
+    const blog = await this.blogRepo.findOne({
+      where: { id },
+      relations: ['user'],
+    });
     if (!blog) {
       throw new HttpException('blog not found', HttpStatus.NOT_FOUND);
     }
@@ -42,13 +45,28 @@ export class BlogService {
         HttpStatus.BAD_REQUEST,
       );
     }
+    if (user.id !== blog.user.id) {
+      throw new HttpException(
+        'You dant have permission to update, (You are no the owner or the admin user)',
+        HttpStatus.FORBIDDEN,
+      );
+    }
     Object.assign(blog, body);
     return await this.blogRepo.save(blog);
   }
-  async deleteBlog(id: number) {
-    const blog = await this.blogRepo.findOne({ where: { id } });
+  async deleteBlog(id: number, user: User) {
+    const blog = await this.blogRepo.findOne({
+      where: { id },
+      relations: ['user'],
+    });
     if (!blog) {
       throw new HttpException('blog not found', HttpStatus.NOT_FOUND);
+    }
+    if (user.id !== blog.user.id) {
+      throw new HttpException(
+        'forbidden: you are not owner or admin user',
+        HttpStatus.FORBIDDEN,
+      );
     }
     await this.blogRepo.remove(blog);
     return;

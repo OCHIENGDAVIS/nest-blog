@@ -21,6 +21,7 @@ import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { CurrentUserDecorator } from 'src/auth/decorators/current-user.decorator';
 import { BlogDto } from './dtos/blog.dto';
 import { BlogSerialiazerInterceptor } from './interceptors/blog-serializer.interceptor';
+import { userInfo } from 'os';
 
 @Controller('blog')
 @UseGuards(AuthGuard)
@@ -47,13 +48,20 @@ export class BlogController {
   }
 
   @Patch('/:id')
-  async updateblog(@Param('id') id: string, @Body() body: UpdateBlogDto) {
-    return await this.blogService.updateBlog(parseInt(id), body);
+  async updateblog(
+    @Param('id') id: string,
+    @Body() body: UpdateBlogDto,
+    @CurrentUserDecorator() user: User,
+  ) {
+    return await this.blogService.updateBlog(parseInt(id), body, user);
   }
 
   @Delete('/:id')
-  async deleteBlog(@Param('id') id: string) {
-    return this.blogService.deleteBlog(parseInt(id));
+  async deleteBlog(
+    @Param('id') id: string,
+    @CurrentUserDecorator() user: User,
+  ) {
+    return this.blogService.deleteBlog(parseInt(id), user);
   }
 
   @Get('/search/blog')
