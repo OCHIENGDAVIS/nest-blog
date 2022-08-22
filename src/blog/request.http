@@ -7,11 +7,11 @@ POST http://localhost:3000/blog/create HTTP/1.1
 content-type: application/json
 
 {
-    "title": "Learning nest js ",
-    "content": "This is for the long life learners"
+    "title": "Nest jes Testing",
+    "content": "Nest je testing is intuitive"
 }
 
-### Gett a a single Blog Post 
+### Get a a single Blog Post 
 GET http://localhost:3000/blog/1
 
 ### Updating a blog 
@@ -25,7 +25,7 @@ content-type: application/json
 }
 
 ### Delete a blog 
-DELETE http://localhost:3000/blog/1
+DELETE http://localhost:3000/blog/8
 
 ### Search a Blog 
 GET http://localhost:3000/blog/search/blog?title=Learning&content=easier

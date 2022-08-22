@@ -5,6 +5,7 @@ import {
   Session,
   Get,
   UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -14,11 +15,11 @@ import { CurrentUserInterceptor } from 'src/interceptors/current-user.intercepto
 import { CurrentUserDecorator } from './decorators/current-user.decorator';
 import { User } from './User.entity';
 import { UserDto } from './dtos/user.dto';
-import { UserSerilizerInterceptor } from './interceptors/user-serializer.intercepto';
+import { EntitySerilizerInterceptor } from './interceptors/entity-serializer.intercepto';
 
 @Controller('auth')
-@UseInterceptors(CurrentUserInterceptor)
-@UseInterceptors(new UserSerilizerInterceptor(UserDto))
+@UseInterceptors(ClassSerializerInterceptor)
+@UseInterceptors(new EntitySerilizerInterceptor(UserDto))
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -38,8 +39,10 @@ export class AuthController {
   }
 
   @Get('/logout')
-  logout(@Session() session: any) {
+  @UseInterceptors(CurrentUserInterceptor)
+  logout(@Session() session: any, @CurrentUserDecorator() user: User) {
     session.userId = null;
+    user = null;
     return;
   }
 }

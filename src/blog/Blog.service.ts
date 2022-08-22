@@ -3,6 +3,7 @@ import { Repository, Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Blog } from './blog.entity';
+import { User } from 'src/auth/User.entity';
 import { CreateBlogDto } from './dtos/create-blog.dto';
 import { UpdateBlogDto } from './dtos/update-blog.dto';
 import { BlogSearchQuery } from './dtos/blog-search-query.dto';
@@ -12,15 +13,19 @@ export class BlogService {
   constructor(@InjectRepository(Blog) private blogRepo: Repository<Blog>) {}
 
   async getAllBlogs() {
-    return await this.blogRepo.find();
+    return await this.blogRepo.find({ relations: ['user'] });
   }
 
-  async createBlog(body: CreateBlogDto) {
+  async createBlog(body: CreateBlogDto, user: User) {
     const blog = this.blogRepo.create(body);
+    blog.user = user;
     return await this.blogRepo.save(blog);
   }
   async getBlog(id: number) {
-    const blog = await this.blogRepo.findOne({ where: { id } });
+    const blog = await this.blogRepo.findOne({
+      where: { id },
+      relations: ['user'],
+    });
     if (!blog) throw new HttpException('Blog not found', HttpStatus.NOT_FOUND);
     return blog;
   }
