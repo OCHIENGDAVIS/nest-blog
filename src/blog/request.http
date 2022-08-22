@@ -25,7 +25,7 @@ content-type: application/json
 }
 
 ### Delete a blog 
-DELETE http://localhost:3000/blog/8
+DELETE http://localhost:3000/blog/2
 
 ### Search a Blog 
 GET http://localhost:3000/blog/search/blog?title=Learning&content=easier
